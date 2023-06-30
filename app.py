@@ -1,8 +1,3 @@
-"""
-A sample of 8 of the 26 Bootstrap themed Plotly figure templates available
-in the dash-bootstrap-template library
-
-"""
 from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import (
@@ -16,6 +11,9 @@ import data_adult
 from dash.dependencies import Input, Output, State
 from controls import geo_list, year_list
 import plotly.graph_objs as go
+from dotenv import load_dotenv
+import os
+
 
 df = px.data.gapminder()
 geos = geo_list()
@@ -135,21 +133,22 @@ tabs = dbc.Tabs(
     [
         dbc.Tab(
             dcc.Loading(
-                id="loading", type="circle", className= "mt-5 pt-5", children=[dbc.Row(id="adult-figures")]
-            ),
-            label="Adult",
-            tab_id="adult",
-        ),
-        dbc.Tab(
-            dcc.Loading(
                 id="loading-1", type="circle", className="mt-5 pt-5", children=[dbc.Row(id="youth-figures")]
             ),
             label="Youth",
             tab_id="youth",
         ),
+
+        dbc.Tab(
+            dcc.Loading(
+                id="loading", type="circle", className= "mt-5 pt-5", children=[dbc.Row(id="adult-figures")]
+            ),
+            label="Adult",
+            tab_id="adult",
+        ),
     ],
     id="tabs",
-    active_tab="adult",
+    active_tab="youth",
 )
 
 # app layout
@@ -364,5 +363,9 @@ def update_radio2(active_tabs, value, provinces, years, theme, children):
         return fig
     return []
 
+server = app.server
+load_dotenv('.env')
+PORT = os.environ.get('CRIMEVIZ-PORT')
+
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(host= "", port=PORT)
